@@ -1,0 +1,4 @@
+#!/bin/sh
+
+command -v figlet > /dev/null && figlet $(hostname --short) || hostname --short
+echo

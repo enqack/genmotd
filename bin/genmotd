@@ -1,0 +1,36 @@
+#!/usr/bin/env python3
+import os
+import subprocess
+
+import genmotd.config as config
+import genmotd.core as core
+
+
+
+def main():
+    if os.geteuid() != 0:
+        exit("You need to have root privileges to run this program")
+
+    core.insure_directory_structure()
+
+    output = ""
+    for file in os.listdir(config.GENMOTD_SCRIPTS):
+        output += core.run_part(os.path.join(config.GENMOTD_SCRIPTS, file))
+
+    try:
+        motd_file = open(config.GENMOTD_MOTD, "w")
+    except:
+        pass
+
+    try:
+        motd_file.write(output)
+    except:
+        pass
+
+    motd_file.close()
+    print(f"Generated {config.GENMOTD_MOTD}")
+
+if __name__ == "__main__":
+    main()
+
+

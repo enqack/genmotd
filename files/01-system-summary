@@ -1,0 +1,31 @@
+#!/bin/sh
+
+GPU_CMD="$(lspci -mm | awk -F '\"|\" \"|\\(' \
+          '/"Display|"3D|"VGA/ {a[$0] = $1 " " $3 " " $4}
+          END {for(i in a) {if(!seen[a[i]]++) print a[i]}}' | sed 's/[0-9:.]*\s\s//')"
+
+while IFS=":" read -r a b; do
+	case $a in
+    "MemTotal") ((mem_used+=${b/kB})); mem_total="${b/kB}" ;;
+    "Shmem") ((mem_used+=${b/kB}))  ;;
+    "MemFree" | "Buffers" | "Cached" | "SReclaimable")
+       mem_used="$((mem_used-=${b/kB}))"
+    ;;
+  esac
+done < /proc/meminfo
+
+MEMORY_USED="$((mem_used / 1024))"
+MEMORY_TOTAL="$((mem_total / 1024))"
+
+# get the load averages
+read one five fifteen rest < /proc/loadavg
+
+echo "OS:        $(cat /etc/gentoo-release)"
+echo "Kernel:    $(uname -r)"
+echo "Uptime:    $(uptime -p | sed 's/up //')"
+echo "Packages:  $(ls -1d /var/db/pkg/*/* | wc -l)"
+echo "CPU:       $(uname -p)"
+echo "GPU:       $GPU_CMD"
+echo "Memory:    $MEMORY_USED MiB / $MEMORY_TOTAL MiB"
+echo "Load:      $one $five $fifteen (1, 5, 15 min)"
+echo "Processes: $(ps ax | wc -l | tr -d " ")"
