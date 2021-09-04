@@ -2,7 +2,6 @@
 import os
 import subprocess
 
-import genmotd.config as config
 import genmotd.core as core
 
 
@@ -13,22 +12,7 @@ def main():
 
     core.insure_directory_structure()
 
-    output = ""
-    for file in os.listdir(config.GENMOTD_SCRIPTS):
-        output += core.run_part(os.path.join(config.GENMOTD_SCRIPTS, file))
-
-    try:
-        motd_file = open(config.GENMOTD_MOTD, "w")
-    except:
-        pass
-
-    try:
-        motd_file.write(output)
-    except:
-        pass
-
-    motd_file.close()
-    print(f"Generated {config.GENMOTD_MOTD}")
+    core.generate_motd()
 
 if __name__ == "__main__":
     main()

@@ -27,3 +27,21 @@ def run_part(file_path):
         return cmd.stdout.decode()
     return ""
 
+def generate_motd():
+    output = ""
+    for file in os.listdir(config.GENMOTD_SCRIPTS):
+        output += run_part(os.path.join(config.GENMOTD_SCRIPTS, file))
+
+    try:
+        motd_file = open(config.GENMOTD_MOTD, "w")
+    except:
+        pass
+
+    try:
+        motd_file.write(output)
+    except:
+        pass
+
+    motd_file.close()
+    print(f"Generated {config.GENMOTD_MOTD}")
+
