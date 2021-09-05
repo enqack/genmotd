@@ -22,7 +22,7 @@ def run_part(file_path):
         print(f"Executing {file_path}")
         cmd = subprocess.run([file_path], capture_output=True)
     except OSError:
-        pass
+        print(f"Execution failed for {file_path}")
     else:
         return cmd.stdout.decode()
     return ""
@@ -34,13 +34,13 @@ def generate_motd():
 
     try:
         motd_file = open(config.GENMOTD_MOTD, "w")
-    except:
-        pass
+    except Exception:
+        print(f"Failed to open {config.GENMOTD_MOTD}")
 
     try:
         motd_file.write(output)
-    except:
-        pass
+    except Exception:
+        print(f"Failed to write to {config.GENMOTD_MOTD}")
 
     motd_file.close()
     print(f"Generated {config.GENMOTD_MOTD}")
