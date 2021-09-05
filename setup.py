@@ -14,6 +14,12 @@ setup(
     version='0.1.0',
     description='Generates a Message of the Day',
     long_description=readme,
+    classifiers=[
+        'Development Status :: 3 - Alpha',
+        'License :: OSI Approed :: BSD License',
+        'Programming Language :: Python :: 3.5',
+        'Topic :: System :: Systems Administration'
+    ],
     author='Enqack',
     author_email='enqack@gmail.com',
     url='https://github.com/enqack/genmotd',
