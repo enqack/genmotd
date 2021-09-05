@@ -1,0 +1,4 @@
+# Run the genmotd job
+SHELL=/bin/bash
+MAIL_TO=root
+* /10 * * * * root /usr/bin/genmotd

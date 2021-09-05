@@ -32,5 +32,9 @@ setup(
         'files/genmotd.d/01-system-summary',
         'files/genmotd.d/99-footer'
         ]
+    ),
+    ('/etc/cron.d', [
+        'files/cron/genmotd'
+    ]
     )]
 )
