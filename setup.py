@@ -28,9 +28,9 @@ setup(
     scripts=['bin/genmotd'],
     include_package_data=True,
     data_files=[('/etc/genmotd.d', [
-        'files/00-header',
-        'files/01-system-summary',
-        'files/99-footer'
+        'files/genmotd.d/00-header',
+        'files/genmotd.d/01-system-summary',
+        'files/genmotd.d/99-footer'
         ]
     )]
 )
