@@ -11,7 +11,7 @@ with open('LICENSE') as f:
 
 setup(
     name='genmotd',
-    version='0.2.0',
+    version='0.2.2',
     description='Generates a Message of the Day',
     long_description=readme,
     classifiers=[
