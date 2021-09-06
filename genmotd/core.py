@@ -28,8 +28,10 @@ def run_part(file_path):
     return ""
 
 def generate_motd():
+    file_list = os.listdir(config.GENMOTD_SCRIPTS)
+
     output = ""
-    for file in os.listdir(config.GENMOTD_SCRIPTS):
+    for file in sorted(file_list):
         output += run_part(os.path.join(config.GENMOTD_SCRIPTS, file))
 
     try:
