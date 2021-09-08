@@ -9,10 +9,10 @@ import genmotd.config as config
 
 
 def main():
-    if os.geteuid() != 0:
-        exit("You need to have root privileges to run this program")
-
-    parser = argparse.ArgumentParser(description="Generates a message of the day.")
+    parser = argparse.ArgumentParser(
+        description="Generates a message of the day.",
+        epilog="You need to have root privileges to run this program"
+    )
 
     parser.add_argument(
         "-p", "--pretend",
@@ -33,6 +33,10 @@ def main():
     )
 
     args = parser.parse_args()
+
+    if os.geteuid() != 0:
+        parser.print_help(sys.stderr)
+        exit("\nYou need to have root privileges to run this program")
 
     try:
         core.insure_directory_structure()
