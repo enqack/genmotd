@@ -36,7 +36,7 @@ def main():
 
     if os.geteuid() != 0:
         parser.print_help(sys.stderr)
-        exit("\nYou need to have root privileges to run this program")
+        exit()
 
     try:
         core.insure_directory_structure()
