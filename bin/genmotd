@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
+import argparse
 import os
-import subprocess
+import sys
 
 import genmotd.core as core
+import genmotd.config as config
 
 
 
@@ -10,9 +12,52 @@ def main():
     if os.geteuid() != 0:
         exit("You need to have root privileges to run this program")
 
-    core.insure_directory_structure()
+    parser = argparse.ArgumentParser(description="Generates a message of the day.")
 
-    core.generate_motd()
+    parser.add_argument(
+        "-p", "--pretend",
+        action="store_true",
+        help=f"do not write to {config.MOTD_FILE}"
+    )
+
+    parser.add_argument(
+        "-d", "--display",
+        action="store_true",
+        help=f"display generated contents of {config.MOTD_FILE}"
+    )
+
+    parser.add_argument(
+        "-q", "--quiet",
+        action="store_true",
+        help="suppress standard output"
+    )
+
+    args = parser.parse_args()
+
+    try:
+        core.insure_directory_structure()
+    except FileExistsError:
+        if not args.quiet:
+            print("Script directory found")
+    except PermissionError:
+        print("Error: Permission denied", file=sys.stderr)
+    else:
+        if not args.quiet:
+            print("Script directory created")
+
+    output = core.generate_motd(args.quiet)
+
+    if not args.pretend:
+        try:
+            core.write_motd(output)
+        except Exception as e:
+            print(e, file=sys.stderr)
+        else:
+            if not args.quiet:
+                print(f"Wrote {config.MOTD_FILE}")
+
+    if args.display:
+        print(output)
 
 if __name__ == "__main__":
     main()

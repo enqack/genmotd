@@ -3,4 +3,4 @@ SHELL=/bin/bash
 MAIL_TO=root
 PATH=/bin:/sbin:/usr/bin:/usr/sbin
 
-*/10 * * * * root /usr/bin/genmotd > /dev/null
+*/10 * * * * root /usr/bin/genmotd -q

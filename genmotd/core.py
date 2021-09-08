@@ -1,49 +1,52 @@
 import os
 import subprocess
+import sys
 
 import genmotd.config as config
 
 
-
 def insure_directory_structure():
     try:
-        os.mkdir(config.GENMOTD_SCRIPTS)
+        os.mkdir(config.SCRIPTS_DIR)
     except FileExistsError:
-        print("Configuration directory found")
+        raise
     except PermissionError:
-        print("Error: Permission denied")
-    except Exception as e:
-        print(e)
-    else:
-        print("Configuration directory created")
+        raise
 
-def run_part(file_path):
+def run_part(file_path, quiet=False):
     try:
-        print(f"Executing {file_path}")
+        if not quiet:
+            print(f"Executing {file_path}")
         cmd = subprocess.run([file_path], capture_output=True)
     except OSError:
-        print(f"Execution failed for {file_path}")
+        print(f"Execution failed for {file_path}", file=sys.stderr)
     else:
         return cmd.stdout.decode()
     return ""
 
-def generate_motd():
-    file_list = os.listdir(config.GENMOTD_SCRIPTS)
+def generate_motd(quiet=False):
+    file_list = os.listdir(config.SCRIPTS_DIR)
 
     output = ""
     for file in sorted(file_list):
-        output += run_part(os.path.join(config.GENMOTD_SCRIPTS, file))
+        output += run_part(os.path.join(config.SCRIPTS_DIR, file), quiet)
+    if not quiet:
+        print(f"Generated {config.MOTD_FILE}")
+    return output
 
+def write_motd(output):
     try:
-        motd_file = open(config.GENMOTD_MOTD, "w")
+        motd_file = open(config.MOTD_FILE, "w")
     except Exception:
-        print(f"Failed to open {config.GENMOTD_MOTD}")
+        print(f"Failed to open {config.MOTD_FILE}", file=sys.stderr)
 
     try:
         motd_file.write(output)
     except Exception:
-        print(f"Failed to write to {config.GENMOTD_MOTD}")
+        print(f"Failed to write to {config.MOTD_FILE}", file=sys.stderr)
 
-    motd_file.close()
-    print(f"Generated {config.GENMOTD_MOTD}")
+    try:
+        motd_file.close()
+    except Exception:
+        raise
 

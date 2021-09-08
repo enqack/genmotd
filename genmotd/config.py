@@ -1,4 +1,4 @@
 
-GENMOTD_MOTD = "/etc/motd"
-GENMOTD_SCRIPTS = "/etc/genmotd.d/"
-GENMOTD_CONFIG = "/etc/genmotd.conf"
+MOTD_FILE = "/etc/motd"
+SCRIPTS_DIR = "/etc/genmotd.d/"
+CONFIG_FILE = "/etc/genmotd.conf"
